@@ -4,40 +4,47 @@
       <h1>Horse Racing</h1>
     </div>
     <div class="actions">
-      <button @click="generateProgram" :disabled="isRaceRunning">Generate Program</button>
-      <button @click="startRace" :disabled="!canStart || isRaceRunning" class="start-btn">Start</button>
+      <button @click="generateProgram" :disabled="isRaceRunning">
+        Generate Program
+      </button>
+      <button
+        @click="startRace"
+        :disabled="!canStart || isRaceRunning"
+        class="start-btn"
+      >
+        Start
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import { computed } from 'vue';
-import { useStore } from 'vuex';
+import { computed } from "vue";
+import { useStore } from "vuex";
 
 export default {
-  name: 'ControlPanel',
+  name: "ControlPanel",
   setup() {
     const store = useStore();
     const isRaceRunning = computed(() => store.getters.isRaceRunning);
     const schedule = computed(() => store.getters.schedule);
-    const canStart = computed(() => schedule.value.length > 0 && !store.getters.isRaceFinished);
+    const canStart = computed(
+      () => schedule.value.length > 0 && !store.getters.isRaceFinished
+    );
 
     const generateProgram = () => {
-      store.dispatch('generateHorses');
-      store.dispatch('generateSchedule');
+      store.dispatch("generateHorses");
+      store.dispatch("generateSchedule");
     };
 
     const startRace = () => {
-      store.dispatch('startRace'); // We will implement this action in store or handle in RaceTrack
-      // Actually, the logic for running the race loop might be better placed in the RaceTrack component 
-      // or a dedicated action that updates state periodically. 
-      // For now, let's assume we trigger a flag in the store.
-      store.commit('SET_RACE_RUNNING', true);
+      store.dispatch("startRace");
+      store.commit("SET_RACE_RUNNING", true);
     };
 
     return { generateProgram, startRace, isRaceRunning, canStart };
-  }
-}
+  },
+};
 </script>
 
 <style scoped lang="scss">
